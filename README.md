@@ -10,7 +10,7 @@ This guide will help you deploy a custom KWS system on any STM32 MCU (in this tu
 
 # Prerequisites
 
-Make sure you followed the Home Automation keywords tutorial, and have a trained impulse.
+Make sure you followed the [Home Automation keywords tutorial](Home Automation traininig dataset/README.md) A, and have a trained impulse.
 
 Creating your Edge Impulse project
 In this tutorial we'll build a model that can distinguish between different type of shoes: flip flops, sneakers or running shoes.
