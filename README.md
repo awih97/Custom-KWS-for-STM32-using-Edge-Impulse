@@ -1,6 +1,6 @@
 # Custom-KWS-for-STM32-using-Edge-Impulse
 
-This guide will help you deploy a custom KWS system on any STM32 MCU (in this tutorial we will be using STM32F44NRE). [Edge Impulse](https://www.edgeimpulse.com/) enables developers to create their own intelligent device solutions with embedded Machine Learning. You will learn how to easily acquire wav dataset samples using your own voice, train your ML algorithm and deploy to your devices. 
+This guide will help you deploy a custom KWS system on any STM32 MCU (in this tutorial we will be using STM32F446RE). [Edge Impulse](https://www.edgeimpulse.com/) enables developers to create their own intelligent device solutions with embedded Machine Learning. You will learn how to easily acquire wav dataset samples using your own voice, train your ML algorithm and deploy to your devices. 
 
 # Requirements
 
