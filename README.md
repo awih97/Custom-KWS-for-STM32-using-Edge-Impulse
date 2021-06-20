@@ -220,7 +220,7 @@ After Debug, select **Window > Show View > Live Expression** and insert all vari
 
 ![image](https://user-images.githubusercontent.com/57432755/122668196-94dc9000-d1e9-11eb-8889-7d23e3ef120d.png)
 
-Now, we can resume our debug view the results in live expression.
+Now, we can resume our debug and view the results in live expression.
 
 First result, we debug with raw data for unknown commands. We can see in the box the classification of unknown is **0.996** and **no_result = 6**. These mean it detect unkwown commands in label 6 which in the switch case earlier unknown is set to `case 6: unknown=1; break;`.
 
