@@ -100,7 +100,11 @@ Open `main.cpp` and add following code under `USER CODE BEGIN Includes`.
          return 0;
      }
      
-Then, initialize all variables:
+Here we will initialize raw data from audio wav of our commands (in practice use later, we will change to mems microphone input). To get the raw data, head back to your edge-impulse site and go to `Live Classification`. Then load any validation sample such as `onlamp2` label and copy over the Raw features and paste to the code below.
+
+![image](https://user-images.githubusercontent.com/57432755/122666295-006d3000-d1df-11eb-90ae-58241951db6d.png)
+     
+Then, initialize all variables: each variables have it function as commented beside it,
 
     /* USER CODE BEGIN 0 */
      float classified = 0;    //Check % classification of each commands, >0.7 consider the results
@@ -130,38 +134,104 @@ Then, initialize all variables:
       
      /* USER CODE END 0 */
      
-Here we will initialize raw data from audio wav of our commands (in practice use later, we will change to mems microphone input). To get the raw data, head back to your edge-impulse site and go to `Live Classification`. Then load any validation sample such as `onlamp2` label and copy over the Raw features and paste to the code above.
-
-![image](https://user-images.githubusercontent.com/57432755/122666295-006d3000-d1df-11eb-90ae-58241951db6d.png)
 
 
 And under `USER CODE BEGIN WHILE`, add:
 
-    while (1)
-    {
-          ei_impulse_result_t result = { 0 };
-          EI_IMPULSE_ERROR res = run_classifier(&signal, &result, true);
-          ei_printf("run_classifier returned: %d\n", res);
+     /* USER CODE BEGIN WHILE */
+      while (1)
+        {
+          /* USER CODE END WHILE */
 
-          ei_printf("Predictions (DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \n",
-              result.timing.dsp, result.timing.classification, result.timing.anomaly);
 
-          // print the predictions
-          ei_printf("[");
-          for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
-              ei_printf_float(result.classification[ix].value);
-      #if EI_CLASSIFIER_HAS_ANOMALY == 1
-              ei_printf(", ");
-      #else
-              if (ix != EI_CLASSIFIER_LABEL_COUNT - 1) {
-                  ei_printf(", ");
-              }
-      #endif
-          }
-      #if EI_CLASSIFIER_HAS_ANOMALY == 1
-          ei_printf_float(result.anomaly);
-      #endif
-          ei_printf("]\n\n\n");
+        signal_t signal;
+        signal.total_length = sizeof(features) / sizeof(features[0]);
+        signal.get_data = &get_feature_data;
+      
+     
+         ei_impulse_result_t result = { 0 };
+         EI_IMPULSE_ERROR res = run_classifier(&signal, &result, true);
+          
 
-        HAL_Delay(5000);
-    }
+          for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) 
+          {
+               label_command++;
+
+                classified = result.classification[ix].value;
+                
+                if(classified > 0.7)
+                {
+                    no_result=label_command;
+                    
+                    switch(no_result) 
+                    {
+                      case 1:
+                        noise=1;
+                        break;
+                      case 2:
+                        offlamp1=1; trigger_lamp1=0;
+                        break;
+                      case 3:
+                        offlamp2=1; trigger_lamp2=0;
+                        break;
+                      case 4:
+                        onlamp1=1; trigger_lamp1=1;
+                        break;
+                      case 5:
+                        onlamp2=1; trigger_lamp2=1;
+                        break;
+                      case 6:
+                        unknown=1;
+                        break;
+                      default:
+                      offlamp2=0; offlamp1=0; onlamp2=0; onlamp1=0; noise=0; unknown=0; trigger_lamp1=0; trigger_lamp2=0;
+                    }
+                  
+                  }
+
+                }
+
+        
+          //trigeer real output to lamp 1 and 2
+          if(trigger_lamp1)HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET); else HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
+          if(trigger_lamp2)HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET); else HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+
+          label_command=0; //reset label
+          HAL_Delay(1000);
+        /* USER CODE END 3 */
+       
+      }
+
+Let me explain about this while loop. First when entering while loop, raw features initialize will go through signal processing MFCC and then run the classifier to identify each commands. All of it already includes from .pack edge-impulse.
+
+Then, in the **for loop**, `EI_CLASSIFIER_LABEL_COUNT` is number of keywords existing in our library. For this, we have 6 label which is `On Lamp 1`, `on lamp 2`, `off lamp 1`, `off lamp 2`, `noise` and `unknown`.
+
+It will loop to detect which label has higher percentage of classification which is from this `classified = result.classification[ix].value;`. Any label which get higher than 0.7, will be regarded as the results.
+
+So in the **if(classified > 0.7)**, `no_result` detect which label it is and trigger each label in the **switch case**. (Later we will talk about how to know which no_result for which labels)
+
+Lastly, at the end of while loop is `HAL_GPIO_WritePin` to give real output from boards if it detect `onlamp1 or onlamp2` to 0 (Active low) and `offlamp1 or offlamp2` to 1.
+
+Select **Run > Debug Configuration** and set to ST-link. Then, build project and flash the application to your development board. **Project > Build Project** and **Run > Debug**.
+
+![image](https://user-images.githubusercontent.com/57432755/122668075-049e4b00-d1e9-11eb-8f6a-dbce0d5c2cf1.png)
+
+After Debug, select **Window > Show View > Live Expression** and insert all variables to view.
+
+![image](https://user-images.githubusercontent.com/57432755/122668196-94dc9000-d1e9-11eb-8889-7d23e3ef120d.png)
+
+Now, we can resume our debug view the results in live expression.
+
+First result, we debug with raw data for unknown commands. We can see in the box the classification of unknown is **0.996** and **no_result = 6**. These mean it detect unkwown commands in label 6 which in the switch case earlier unknown is set to `case 6: unknown=1; break;`.
+
+![image](https://user-images.githubusercontent.com/57432755/122668292-edac2880-d1e9-11eb-9c2e-c0a0ccf8c9d1.png)
+
+Next example result, we change the raw input from **unknown** to **onlamp2** and the result give **no_result = 5"" which mean `onlamp2` is label at label 5
+
+![image](https://user-images.githubusercontent.com/57432755/122668264-cb1a0f80-d1e9-11eb-9b6b-250151bf5763.png)
+
+ If you make your own dataset and different commands from this tutorials, that mean your label will be different from this tutorial and cannot use the **switch case** function here. What you can do is source the raw input for each commands you ahve you have and observe each commands give which **no_result** value. Then you can change the **switch case** for your own projects.
+ 
+ 
+
+
