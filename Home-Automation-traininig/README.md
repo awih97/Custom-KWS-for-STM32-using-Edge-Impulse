@@ -111,7 +111,7 @@ Click on the Deployment, choose create library for `Cube.MX CMSI-PACK`, select o
 
 
 
-
+Download [KWS_home_automation.1.0.1.pack](./KWS_home_automation.1.0.1.pack) before you continue to deploy into stm32 boards.
 You can go [back to deploying this model into SMT32 board](../README.md)
 
 
