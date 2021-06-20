@@ -202,7 +202,7 @@ It will loop to detect which label has higher percentage of classification which
 
 So in the **if(classified > 0.7)**, `no_result` detect which label it is and trigger each label in the **switch case**. (Later we will talk about how to know which no_result for which labels)
 
-Lastly, at the end of while loop is `HAL_GPIO_WritePin` to give real output from boards if it detect `onlamp1 or onlamp2` to 0 (Active low) and `offlamp1 or offlamp2` to 1.
+Lastly, at the end of while loop is `HAL_GPIO_WritePin` to give real output from boards, if it detect `onlamp1 or onlamp2` PIN will get 0 (Active low)  and `offlamp1 or offlamp2` PIN will get 1 (off mode).
 
 Select **Run > Debug Configuration** and set to ST-link. Then, build project and flash the application to your development board. **Project > Build Project** and **Run > Debug**.
 
