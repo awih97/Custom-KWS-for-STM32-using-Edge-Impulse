@@ -50,7 +50,7 @@ From the [Home Automation keywords tutorial](Home-Automation-traininig/README.md
 ![image](https://user-images.githubusercontent.com/57432755/122664992-3b6b6580-d1d7-11eb-8011-0d5d7878b494.png)
 
   4. Back to the **Pinout Configuration**.
-  5. Click **Software packs > Select Components.
+  5. Click **Software packs > Select Components**.
   6. Select your project, expand the pack andd checkbox under selection core.
 
 ![image](https://user-images.githubusercontent.com/57432755/122665052-a2891a00-d1d7-11eb-95af-b2ccbb4997a1.png)
@@ -62,7 +62,7 @@ We need to set up I2S for INMP441 MEMS Digital Microphone to receive audio wav a
   1. Back to the **Pinout Configuration**.
   2. Select **Multimedia > I2S1**.
   3. Select mode **Half-Duplex Master**.
-  4. Set Transmission Mode to **Mode Master Receive"
+  4. Set Transmission Mode to **Mode Master Receive**
 
 ![image](https://user-images.githubusercontent.com/57432755/122665176-52f71e00-d1d8-11eb-9f99-b025779ed6f0.png)
 
