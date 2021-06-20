@@ -23,7 +23,7 @@ In this tutorial we'll build a model that can distinguish between different type
 
 # Set up STM32IDE 
 
-Open your STM32IDE > Create `new project` and find `SMT32F44NRE boards` > give `Project name` > choose `C++` > click `Finish`
+Open your STM32IDE > Create `new project` and find `SMT32F446RE boards` > give `Project name` > choose `C++` > click `Finish`
 
 ![image](https://user-images.githubusercontent.com/57432755/122664732-c4819d00-d1d5-11eb-9b98-06c25454bfe1.png)
 
