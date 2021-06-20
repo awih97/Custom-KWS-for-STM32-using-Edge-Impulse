@@ -87,24 +87,16 @@ To debug you can use many ways for examples using [printf through SWV trace](htt
 To make easier, we will just use live expression from STM32IDE.
 
 Open `main.cpp` and add following code under `USER CODE BEGIN Includes`. 
+ 
      #include "edge-impulse-sdk/classifier/ei_run_classifier.h"
      using namespace ei;
 
-     // paste the raw features here
-     int features[] = {
-         13, -5, 1, -13, -15, -13, -5, 0, -8,  ...
-     };
-
-     int get_feature_data(size_t offset, size_t length, float *out_ptr) {
-         memcpy(out_ptr, features + offset, length * sizeof(float));
-         return 0;
-     }
-     
+  
 Here we will initialize raw data from audio wav of our commands (in practice use later, we will change to mems microphone input). To get the raw data, head back to your edge-impulse site and go to `Live Classification`. Then load any validation sample such as `onlamp2` label and copy over the Raw features and paste to the code below.
 
 ![image](https://user-images.githubusercontent.com/57432755/122666295-006d3000-d1df-11eb-90ae-58241951db6d.png)
      
-Then, initialize all variables: each variables have it function as commented beside it,
+Then, initialize all variables in `USER CODE BEGIN 0`. Each variables have it function as commented beside it,
 
     /* USER CODE BEGIN 0 */
      float classified = 0;    //Check % classification of each commands, >0.7 consider the results
