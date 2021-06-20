@@ -81,4 +81,87 @@ We need to set up I2S for INMP441 MEMS Digital Microphone to receive audio wav a
 
 # Test Run the impulse library
 
-Now, 
+Now, we can try to test run our library use from impulse to make sure results is comparable to impulse results.
+To debug you can use many ways for examples using [printf through SWV trace](https://www.youtube.com/watch?v=sPzQ5CniWtw) or any other external software.
+
+To make easier, we will just use live expression from STM32IDE.
+
+Open `main.cpp` and add following code under `USER CODE BEGIN Includes`. 
+     #include "edge-impulse-sdk/classifier/ei_run_classifier.h"
+     using namespace ei;
+
+     // paste the raw features here
+     int features[] = {
+         13, -5, 1, -13, -15, -13, -5, 0, -8,  ...
+     };
+
+     int get_feature_data(size_t offset, size_t length, float *out_ptr) {
+         memcpy(out_ptr, features + offset, length * sizeof(float));
+         return 0;
+     }
+     
+Then, initialize all variables:
+
+    /* USER CODE BEGIN 0 */
+     float classified = 0;    //Check % classification of each commands, >0.7 consider the results
+     int label_command=0;     //number of labeling for each commands     
+     int no_result=0;         //which command detected
+     
+     //indicates which commands detected by got value 1
+     bool offlamp2 =0 ; 
+     bool offlamp1=0;
+     bool onlamp2=0;
+     bool onlamp1=0;
+     bool noise =0;
+     bool unknown =0;
+     
+     bool trigger_lamp1=0;    //give real output from the board to lamp 1
+     bool trigger_lamp2=0;    //give real output from the board to lamp 1
+     
+     // paste the raw features here
+     float features[16000] = {
+                                13, -5, 1, -13, -15, -13, -5, 0, -8,  ...
+      };
+     
+     int get_feature_data(size_t offset, size_t length, float *out_ptr) {
+           memcpy(out_ptr, features + offset, length * sizeof(float));
+           return 0;
+      }
+      
+     /* USER CODE END 0 */
+     
+Here we will initialize raw data from audio wav of our commands (in practice use later, we will change to mems microphone input). To get the raw data, head back to your edge-impulse site and go to `Live Classification`. Then load any validation sample such as `onlamp2` label and copy over the Raw features and paste to the code above.
+
+![image](https://user-images.githubusercontent.com/57432755/122666295-006d3000-d1df-11eb-90ae-58241951db6d.png)
+
+
+And under `USER CODE BEGIN WHILE`, add:
+
+    while (1)
+    {
+          ei_impulse_result_t result = { 0 };
+          EI_IMPULSE_ERROR res = run_classifier(&signal, &result, true);
+          ei_printf("run_classifier returned: %d\n", res);
+
+          ei_printf("Predictions (DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \n",
+              result.timing.dsp, result.timing.classification, result.timing.anomaly);
+
+          // print the predictions
+          ei_printf("[");
+          for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
+              ei_printf_float(result.classification[ix].value);
+      #if EI_CLASSIFIER_HAS_ANOMALY == 1
+              ei_printf(", ");
+      #else
+              if (ix != EI_CLASSIFIER_LABEL_COUNT - 1) {
+                  ei_printf(", ");
+              }
+      #endif
+          }
+      #if EI_CLASSIFIER_HAS_ANOMALY == 1
+          ei_printf_float(result.anomaly);
+      #endif
+          ei_printf("]\n\n\n");
+
+        HAL_Delay(5000);
+    }
