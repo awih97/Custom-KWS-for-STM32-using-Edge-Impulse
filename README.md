@@ -11,7 +11,7 @@ This guide will help you deploy a custom KWS system on any STM32 MCU (in this tu
 
 # Prerequisites
 
-Make sure you followed the [Home Automation keywords tutorial](Home-Automation-traininig/README.md) A, and have a trained impulse.
+Make sure you followed the [Home Automation keywords tutorial](Home-Automation-traininig/README.md), and have a trained impulse.
 
 # Overview
 
