@@ -230,7 +230,7 @@ Next example result, we change the raw input from **unknown** to **onlamp2** and
 
 ![image](https://user-images.githubusercontent.com/57432755/122668264-cb1a0f80-d1e9-11eb-9b6b-250151bf5763.png)
 
- If you make your own dataset and different commands from this tutorials, that mean your label will be different from this tutorial and cannot use the **switch case** function here. What you can do is source the raw input for each commands you ahve you have and observe each commands give which **no_result** value. Then you can change the **switch case** for your own projects.
+ If you make your own dataset and different commands from this tutorials, that mean your label will be different from this tutorial and cannot use the **switch case** function here. What you can do is source the raw input for each commands you have and observe each commands give which **no_result** value. Then you can change the **switch case** for your own projects.
  
  
 
