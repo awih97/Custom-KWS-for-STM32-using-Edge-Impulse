@@ -218,7 +218,7 @@ First result, we debug with raw data for unknown commands. We can see in the box
 
 ![image](https://user-images.githubusercontent.com/57432755/122668292-edac2880-d1e9-11eb-9c2e-c0a0ccf8c9d1.png)
 
-Next example result, we change the raw input from **unknown** to **onlamp2** and the result give **no_result = 5"" which mean `onlamp2` is label at label 5
+Next example result, we change the raw input from **unknown** to **onlamp2** and the result give **no_result = 5** which mean `onlamp2` is label at label 5
 
 ![image](https://user-images.githubusercontent.com/57432755/122668264-cb1a0f80-d1e9-11eb-9b6b-250151bf5763.png)
 
